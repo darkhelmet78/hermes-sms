@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes Home Alerts - SMS Opt-In</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; color: #1f2933; line-height: 1.5; }
+  h1 { font-size: 1.6rem; margin-bottom: 4px; }
+  .sub { color: #52606d; margin-top: 0; }
+  form { border: 1px solid #d9e2ec; border-radius: 8px; padding: 20px; margin-top: 24px; }
+  label { display: block; font-weight: 600; margin-bottom: 6px; }
+  input[type=text], input[type=tel] { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #bcccdc; border-radius: 6px; font-size: 1rem; margin-bottom: 16px; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-weight: normal; font-size: 0.95rem; }
+  .consent input { margin-top: 4px; }
+  button { margin-top: 16px; background: #1f6feb; color: #fff; border: 0; border-radius: 6px; padding: 10px 18px; font-size: 1rem; cursor: pointer; }
+  footer { margin-top: 32px; font-size: 0.9rem; color: #52606d; }
+</style>
+</head>
+<body>
+  <h1>Hermes Home Alerts</h1>
+  <p class="sub">Private SMS notification program operated by Robert Desselles, Folsom, Louisiana</p>
+
+  <p>Hermes Home Alerts sends automated text messages from a home automation server to members of the Desselles household only. Messages include door and garage alerts, security and power alerts, server status, and scheduled household reminders. No marketing or promotional messages are sent.</p>
+
+  <p>Use this form to request text alerts. Your request is reviewed by the program owner before your number is added.</p>
+
+  <form action="mailto:rdesselles@gmail.com?subject=Hermes%20Home%20Alerts%20Opt-In" method="post" enctype="text/plain">
+    <label for="name">Full name</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="phone">Mobile phone number</label>
+    <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required>
+
+    <label class="consent">
+      <input type="checkbox" name="sms_consent" value="yes" required>
+      <span>I agree to receive automated text messages from Hermes Home Alerts at the number provided, including home alerts and household reminders. Message frequency varies (about 1&ndash;10 messages per week). Msg &amp; data rates may apply. Reply STOP to opt out at any time or HELP for help. Consent is not a condition of any purchase. See our <a href="sms-terms.html">SMS Terms &amp; Conditions</a> and <a href="privacy.html">Privacy Policy</a>.</span>
+    </label>
+
+    <button type="submit">Request text alerts</button>
+  </form>
+
+  <p>After your number is added, you will receive this confirmation text:<br>
+  <em>"Hermes Home Alerts: You're subscribed to home alerts and reminders. About 1-10 msgs/week. Msg &amp; data rates may apply. Reply HELP for help, STOP to opt out."</em></p>
+
+  <footer>
+    Questions: <a href="mailto:rdesselles@gmail.com">rdesselles@gmail.com</a><br>
+    <a href="sms-terms.html">SMS Terms &amp; Conditions</a> &middot; <a href="privacy.html">Privacy Policy</a>
+  </footer>
+</body>
+</html>
