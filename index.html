@@ -5,76 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hermes Home Alerts - Sign Up</title>
 <style>
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:40px auto;padding:0 16px;color:#1a1a1a;line-height:1.5;background:#fff}
-  h1{font-size:1.6rem;margin-bottom:.25rem}
-  label{display:block;font-weight:600;margin-top:1rem}
-  input[type=text],input[type=email],input[type=tel]{width:100%;padding:.6rem;font-size:1rem;border:1px solid #bbb;border-radius:6px;box-sizing:border-box}
-  .opt{font-weight:400;color:#666;font-size:.9rem}
-  .consent{display:flex;gap:.6rem;align-items:flex-start;margin-top:1.25rem;padding:.9rem;border:1px solid #ddd;border-radius:6px;background:#fafafa}
-  .consent input{margin-top:.3rem;flex:0 0 auto}
-  .consent label{font-weight:400;margin:0}
-  button{margin-top:1.25rem;padding:.7rem 1.4rem;font-size:1rem;border:0;border-radius:6px;background:#0b5cad;color:#fff;cursor:pointer}
-  #success{display:none;margin-top:1.5rem;padding:1rem;border-radius:6px;background:#e8f5e9;border:1px solid #9ccc9c}
-  .links{margin-top:2rem;font-size:.9rem}
-  .err{color:#b00020;font-size:.9rem;display:none}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:40px auto;padding:0 16px;color:#1a1a1a;line-height:1.5;background:#fff}
+h1{font-size:1.6rem;margin-bottom:.25rem}
+label{display:block;font-weight:600;margin-top:1rem}
+input[type=text],input[type=email],input[type=tel]{width:100%;padding:.6rem;font-size:1rem;border:1px solid #bbb;border-radius:6px;box-sizing:border-box}
+.opt{font-weight:400;color:#666;font-size:.9rem}
+.consent{display:flex;gap:.6rem;align-items:flex-start;margin-top:1.25rem;padding:.9rem;border:1px solid #ddd;border-radius:6px;background:#fafafa}
+.consent input{margin-top:.3rem;flex:0 0 auto}
+.consent label{font-weight:400;margin:0}
+button{margin-top:1.25rem;padding:.7rem 1.4rem;font-size:1rem;border:0;border-radius:6px;background:#0b5cad;color:#fff;cursor:pointer}
+button[disabled]{opacity:.6;cursor:default}
+#success{display:none;margin-top:1.5rem;padding:1rem;border-radius:6px;background:#e8f5e9;border:1px solid #9ccc9c}
+.links{margin-top:2rem;font-size:.9rem}
+.err{color:#b00020;font-size:.9rem;display:none}
 </style>
 </head>
 <body>
 <h1>Hermes Home Alerts</h1>
 <p>Hermes Home Alerts is a private notification program operated by Robert Desselles for the Desselles household in Folsom, Louisiana. Use this form to join the household contact list. Text message alerts are <strong>optional</strong>.</p>
 
-<form id="signup" action="mailto:rdesselles@gmail.com?subject=Hermes%20Home%20Alerts%20Sign-Up" method="post" enctype="text/plain" novalidate>
-  <label for="name">Full name</label>
-  <input type="text" id="name" name="name" required autocomplete="name">
+<form id="signup" action="https://formsubmit.co/rdesselles@gmail.com" method="post" novalidate>
+<input type="hidden" name="_subject" value="Hermes Home Alerts Sign-Up">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_captcha" value="false">
+<input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
-  <label for="email">Email address</label>
-  <input type="email" id="email" name="email" required autocomplete="email">
+<label for="name">Full name</label>
+<input type="text" id="name" name="name" required autocomplete="name">
 
-  <label for="phone">Mobile phone number <span class="opt">(optional &mdash; only needed for text alerts)</span></label>
-  <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="(504) 555-0123">
-  <div class="err" id="phoneErr">Enter a mobile number to receive text alerts, or uncheck the text alert box.</div>
+<label for="email">Email address</label>
+<input type="email" id="email" name="email" required autocomplete="email">
 
-  <div class="consent">
-    <input type="checkbox" id="smsConsent" name="smsConsent" value="yes">
-    <label for="smsConsent">
-      <strong>Optional:</strong> By checking this box, I agree to receive recurring automated SMS text messages from Hermes Home Alerts (Desselles household) at the mobile number provided, including door, garage, security, power, home server status alerts, and household reminders. Message frequency varies, about 1&ndash;10 messages per week. Message and data rates may apply. Reply <strong>STOP</strong> to cancel at any time; reply <strong>HELP</strong> for help. Consent is not a condition of joining or of any purchase. See our <a href="sms-terms.html">SMS Terms &amp; Conditions</a> and <a href="privacy.html">Privacy Policy</a>.
-    </label>
-  </div>
+<label for="phone">Mobile phone number <span class="opt">(optional &mdash; only needed for text alerts)</span></label>
+<input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="(504) 555-0123">
+<div class="err" id="phoneErr">Enter a mobile number to receive text alerts, or uncheck the text alert box.</div>
 
-  <button type="submit">Submit</button>
+<div class="consent">
+<input type="checkbox" id="smsConsent" name="smsConsent" value="yes">
+<label for="smsConsent">
+<strong>Optional:</strong> By checking this box, I agree to receive recurring automated SMS text messages from Hermes Home Alerts (Desselles household) at the mobile number provided, including door, garage, security, power, home server status alerts, and household reminders. Message frequency varies, about 1&ndash;10 messages per week. Message and data rates may apply. Reply <strong>STOP</strong> to cancel at any time; reply <strong>HELP</strong> for help. Consent is not a condition of joining or of any purchase. See our <a href="sms-terms.html">SMS Terms &amp; Conditions</a> and <a href="privacy.html">Privacy Policy</a>.
+</label>
+</div>
+
+<button type="submit" id="submitBtn">Submit</button>
+<div class="err" id="sendErr">Sorry, the form could not be sent. Please try again, or email rdesselles@gmail.com.</div>
 </form>
 
 <div id="success" role="status" aria-live="polite"></div>
 
 <p class="links">
-  <a href="sms-terms.html">SMS Terms &amp; Conditions</a> &nbsp;|&nbsp;
-  <a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
-  Contact: <a href="mailto:rdesselles@gmail.com">rdesselles@gmail.com</a>
+<a href="sms-terms.html">SMS Terms &amp; Conditions</a> &nbsp;|&nbsp;
+<a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+Contact: <a href="mailto:rdesselles@gmail.com">rdesselles@gmail.com</a>
 </p>
 <p class="opt">No mobile information will be shared with third parties or affiliates for marketing or promotional purposes.</p>
 
 <script>
 document.getElementById('signup').addEventListener('submit', function (e) {
-  var f = e.target;
-  var el = f.elements;
-  var name = el.namedItem('name').value.trim(), email = el.namedItem('email').value.trim();
-  var phone = el.namedItem('phone').value.trim(), sms = el.namedItem('smsConsent').checked;
-  var perr = document.getElementById('phoneErr');
-  perr.style.display = 'none';
-  if (!name || !email) { e.preventDefault(); f.reportValidity(); return; }
-  if (sms && phone.replace(/\D/g, '').length < 10) { e.preventDefault(); perr.style.display = 'block'; el.namedItem('phone').focus(); return; }
+e.preventDefault();
+var f = e.target;
+var el = f.elements;
+var name = el.namedItem('name').value.trim(), email = el.namedItem('email').value.trim();
+var phone = el.namedItem('phone').value.trim(), sms = el.namedItem('smsConsent').checked;
+var perr = document.getElementById('phoneErr'), serr = document.getElementById('sendErr');
+var btn = document.getElementById('submitBtn');
+perr.style.display = 'none'; serr.style.display = 'none';
+if (!name || !email) { f.reportValidity(); return; }
+if (sms && phone.replace(/\D/g, '').length < 10) { perr.style.display = 'block'; el.namedItem('phone').focus(); return; }
 
-  var msg = '<strong>Thanks, ' + name.replace(/</g, '&lt;') + '! Your request was submitted.</strong><br>';
-  if (sms) {
-    msg += 'You opted in to Hermes Home Alerts text messages. Each request is reviewed before the number is added. ' +
-           'You will then receive this confirmation text: "Hermes Home Alerts: You\'re subscribed to home alerts &amp; reminders. ' +
-           'About 1-10 msgs/wk. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help."';
-  } else {
-    msg += 'You did not opt in to text messages and will not receive SMS alerts. You can return to this page any time to opt in.';
-  }
-  var s = document.getElementById('success');
-  s.innerHTML = msg; s.style.display = 'block';
-  setTimeout(function () { f.style.display = 'none'; }, 0);
+var data = {
+_subject: 'Hermes Home Alerts Sign-Up',
+_template: 'table',
+name: name,
+email: email,
+phone: phone,
+smsConsent: sms ? 'YES - agreed to SMS consent text' : 'NO',
+consentTimestamp: new Date().toISOString(),
+pageUrl: location.href
+};
+
+btn.disabled = true; btn.textContent = 'Sending...';
+fetch('https://formsubmit.co/ajax/rdesselles@gmail.com', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+body: JSON.stringify(data)
+}).then(function (r) {
+if (!r.ok) throw new Error('send failed');
+var msg = '<strong>Thanks, ' + name.replace(/</g, '&lt;') + '! Your request was submitted.</strong><br>';
+if (sms) {
+msg += 'You opted in to Hermes Home Alerts text messages. Each request is reviewed before the number is added. ' +
+'You will then receive this confirmation text: "Hermes Home Alerts: You\'re subscribed to home alerts &amp; reminders. ' +
+'About 1-10 msgs/wk. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help."';
+} else {
+msg += 'You did not opt in to text messages and will not receive SMS alerts. You can return to this page any time to opt in.';
+}
+var s = document.getElementById('success');
+s.innerHTML = msg; s.style.display = 'block';
+f.style.display = 'none';
+}).catch(function () {
+serr.style.display = 'block';
+btn.disabled = false; btn.textContent = 'Submit';
+});
 });
 </script>
 </body>
