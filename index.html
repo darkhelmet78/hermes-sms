@@ -11,24 +11,30 @@ label{display:block;font-weight:600;margin-top:1rem}
 input[type=text],input[type=email],input[type=tel]{width:100%;padding:.6rem;font-size:1rem;border:1px solid #bbb;border-radius:6px;box-sizing:border-box}
 .opt{font-weight:400;color:#666;font-size:.9rem}
 .consent{display:flex;gap:.6rem;align-items:flex-start;margin-top:1.25rem;padding:.9rem;border:1px solid #ddd;border-radius:6px;background:#fafafa}
-.consent input{margin-top:.3rem;flex:0 0 auto}
+.consent input{margin-top:.3rem;flex:0 0 auto;width:18px;height:18px}
 .consent label{font-weight:400;margin:0}
 button{margin-top:1.25rem;padding:.7rem 1.4rem;font-size:1rem;border:0;border-radius:6px;background:#0b5cad;color:#fff;cursor:pointer}
 button[disabled]{opacity:.6;cursor:default}
 #success{display:none;margin-top:1.5rem;padding:1rem;border-radius:6px;background:#e8f5e9;border:1px solid #9ccc9c}
 .links{margin-top:2rem;font-size:.9rem}
-.err{color:#b00020;font-size:.9rem;display:none}
+.err{color:#b00020;font-size:.9rem;display:none;margin-top:.5rem}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 </style>
 </head>
 <body>
 <h1>Hermes Home Alerts</h1>
-<p>Hermes Home Alerts is a private notification program operated by Robert Desselles for the Desselles household in Folsom, Louisiana. Use this form to join the household contact list. Text message alerts are <strong>optional</strong>.</p>
+<p>Hermes Home Alerts is a private, non-commercial notification program operated by Robert Desselles for the Desselles household in Folsom, Louisiana. Use this form to join the household contact list. Text message alerts are <strong>optional</strong>.</p>
 
-<form id="signup" action="https://formsubmit.co/rdesselles@gmail.com" method="post" novalidate>
+<!-- The form posts directly to FormSubmit. JavaScript sends it in the background so the page never waits on the form service. -->
+<form id="signup" action="https://formsubmit.co/rdesselles@gmail.com" method="post">
 <input type="hidden" name="_subject" value="Hermes Home Alerts Sign-Up">
 <input type="hidden" name="_template" value="table">
 <input type="hidden" name="_captcha" value="false">
-<input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+<input type="hidden" name="_next" id="nextUrl" value="https://darkhelmet78.github.io/hermes-sms/thanks.html">
+<input type="hidden" name="consent_text" id="consentText" value="">
+<input type="hidden" name="consent_timestamp" id="consentTime" value="">
+<input type="hidden" name="page_url" id="pageUrl" value="">
+<div class="hp" aria-hidden="true"><input type="text" name="_honey" tabindex="-1" autocomplete="off"></div>
 
 <label for="name">Full name</label>
 <input type="text" id="name" name="name" required autocomplete="name">
@@ -38,20 +44,22 @@ button[disabled]{opacity:.6;cursor:default}
 
 <label for="phone">Mobile phone number <span class="opt">(optional &mdash; only needed for text alerts)</span></label>
 <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="(504) 555-0123">
-<div class="err" id="phoneErr">Enter a mobile number to receive text alerts, or uncheck the text alert box.</div>
+<div class="err" id="phoneErr">Enter a 10-digit mobile number to receive text alerts, or uncheck the text alert box.</div>
 
 <div class="consent">
-<input type="checkbox" id="smsConsent" name="smsConsent" value="yes">
-<label for="smsConsent">
+<input type="checkbox" id="smsConsent" name="sms_consent" value="YES - agreed to SMS consent text">
+<label for="smsConsent" id="smsConsentLabel">
 <strong>Optional:</strong> By checking this box, I agree to receive recurring automated SMS text messages from Hermes Home Alerts (Desselles household) at the mobile number provided, including door, garage, security, power, home server status alerts, and household reminders. Message frequency varies, about 1&ndash;10 messages per week. Message and data rates may apply. Reply <strong>STOP</strong> to cancel at any time; reply <strong>HELP</strong> for help. Consent is not a condition of joining or of any purchase. See our <a href="sms-terms.html">SMS Terms &amp; Conditions</a> and <a href="privacy.html">Privacy Policy</a>.
 </label>
 </div>
 
 <button type="submit" id="submitBtn">Submit</button>
-<div class="err" id="sendErr">Sorry, the form could not be sent. Please try again, or email rdesselles@gmail.com.</div>
+<div class="err" id="sendErr" role="alert">Sorry, the form could not be sent. Please try again, or email <a href="mailto:rdesselles@gmail.com">rdesselles@gmail.com</a>.</div>
 </form>
 
 <div id="success" role="status" aria-live="polite"></div>
+
+<p>You can also opt in to text alerts by texting <strong>START</strong> to (985) 615-2937. You will receive a confirmation text, and you can reply <strong>STOP</strong> at any time to opt out.</p>
 
 <p class="links">
 <a href="sms-terms.html">SMS Terms &amp; Conditions</a> &nbsp;|&nbsp;
@@ -61,52 +69,88 @@ Contact: <a href="mailto:rdesselles@gmail.com">rdesselles@gmail.com</a>
 <p class="opt">No mobile information will be shared with third parties or affiliates for marketing or promotional purposes.</p>
 
 <script>
-document.getElementById('signup').addEventListener('submit', function (e) {
-e.preventDefault();
-var f = e.target;
-var el = f.elements;
-var name = el.namedItem('name').value.trim(), email = el.namedItem('email').value.trim();
-var phone = el.namedItem('phone').value.trim(), sms = el.namedItem('smsConsent').checked;
-var perr = document.getElementById('phoneErr'), serr = document.getElementById('sendErr');
-var btn = document.getElementById('submitBtn');
-perr.style.display = 'none'; serr.style.display = 'none';
-if (!name || !email) { f.reportValidity(); return; }
-if (sms && phone.replace(/\D/g, '').length < 10) { perr.style.display = 'block'; el.namedItem('phone').focus(); return; }
+(function () {
+  var AJAX_URL = 'https://formsubmit.co/ajax/rdesselles@gmail.com';
+  var WAIT_MS = 4000; // show confirmation after this long; the request keeps going in the background
+  var CONFIRM_TEXT = 'Hermes Home Alerts: You\'re subscribed to home alerts & reminders from the Desselles household. ' +
+    'About 1-10 msgs/wk. Msg & data rates may apply. Reply HELP for help, STOP to cancel.';
 
-var data = {
-_subject: 'Hermes Home Alerts Sign-Up',
-_template: 'table',
-name: name,
-email: email,
-phone: phone,
-smsConsent: sms ? 'YES - agreed to SMS consent text' : 'NO',
-consentTimestamp: new Date().toISOString(),
-pageUrl: location.href
-};
+  var f = document.getElementById('signup');
+  var el = f.elements;
+  var btn = document.getElementById('submitBtn');
+  var perr = document.getElementById('phoneErr');
+  var serr = document.getElementById('sendErr');
 
-btn.disabled = true; btn.textContent = 'Sending...';
-fetch('https://formsubmit.co/ajax/rdesselles@gmail.com', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-body: JSON.stringify(data)
-}).then(function (r) {
-if (!r.ok) throw new Error('send failed');
-var msg = '<strong>Thanks, ' + name.replace(/</g, '&lt;') + '! Your request was submitted.</strong><br>';
-if (sms) {
-msg += 'You opted in to Hermes Home Alerts text messages. Each request is reviewed before the number is added. ' +
-'You will then receive this confirmation text: "Hermes Home Alerts: You\'re subscribed to home alerts &amp; reminders. ' +
-'About 1-10 msgs/wk. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help."';
-} else {
-msg += 'You did not opt in to text messages and will not receive SMS alerts. You can return to this page any time to opt in.';
-}
-var s = document.getElementById('success');
-s.innerHTML = msg; s.style.display = 'block';
-f.style.display = 'none';
-}).catch(function () {
-serr.style.display = 'block';
-btn.disabled = false; btn.textContent = 'Submit';
-});
-});
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function showSuccess(name, sms) {
+    var msg = '<strong>Thanks, ' + esc(name) + '! Your sign-up was sent.</strong><br>';
+    if (sms) {
+      msg += 'You opted in to Hermes Home Alerts text messages. Each request is reviewed before the number is added. ' +
+        'You will then receive this confirmation text: &ldquo;' + esc(CONFIRM_TEXT) + '&rdquo;';
+    } else {
+      msg += 'You did not opt in to text messages and will not receive SMS alerts. You can return to this page any time to opt in.';
+    }
+    var s = document.getElementById('success');
+    s.innerHTML = msg;
+    s.style.display = 'block';
+    f.style.display = 'none';
+  }
+
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = el.namedItem('name').value.trim();
+    var email = el.namedItem('email').value.trim();
+    var phone = el.namedItem('phone').value.trim();
+    var sms = el.namedItem('sms_consent').checked;
+    perr.style.display = 'none';
+    serr.style.display = 'none';
+
+    if (!name || !email || !el.namedItem('email').checkValidity()) { f.reportValidity(); return; }
+    if (sms && phone.replace(/\D/g, '').length < 10) { perr.style.display = 'block'; el.namedItem('phone').focus(); return; }
+
+    // Consent record fields
+    document.getElementById('consentText').value = sms ? document.getElementById('smsConsentLabel').innerText.replace(/\s+/g, ' ').trim() : 'Did not opt in to SMS';
+    document.getElementById('consentTime').value = new Date().toISOString();
+    document.getElementById('pageUrl').value = location.href;
+    document.getElementById('nextUrl').value = 'https://darkhelmet78.github.io/hermes-sms/thanks.html' + (sms ? '?sms=1' : '');
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    // URL-encoded body = a "simple" CORS request (no preflight), and keepalive lets it
+    // finish even if the visitor leaves the page.
+    var body = new URLSearchParams(new FormData(f));
+    var settled = false;
+
+    var timer = setTimeout(function () {
+      if (settled) return;
+      settled = true;
+      showSuccess(name, sms);
+    }, WAIT_MS);
+
+    fetch(AJAX_URL, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: body,
+      keepalive: true
+    }).then(function (r) {
+      if (settled) return;
+      if (r.ok) {
+        settled = true; clearTimeout(timer); showSuccess(name, sms);
+      } else {
+        settled = true; clearTimeout(timer);
+        serr.style.display = 'block'; btn.disabled = false; btn.textContent = 'Submit';
+      }
+    }).catch(function () {
+      if (settled) return;
+      settled = true; clearTimeout(timer);
+      // Network-level failure (blocked request, etc.): fall back to a normal form post,
+      // which FormSubmit redirects to thanks.html.
+      HTMLFormElement.prototype.submit.call(f);
+    });
+  });
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes Home Alerts - Thank You</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:560px;margin:40px auto;padding:0 16px;color:#1a1a1a;line-height:1.5;background:#fff}
+h1{font-size:1.6rem;margin-bottom:.25rem}
+.box{margin-top:1.5rem;padding:1rem;border-radius:6px;background:#e8f5e9;border:1px solid #9ccc9c}
+.links{margin-top:2rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<h1>Hermes Home Alerts</h1>
+<div class="box" role="status">
+<strong>Thanks! Your sign-up was sent.</strong><br>
+<span id="smsYes" hidden>You opted in to Hermes Home Alerts text messages. Each request is reviewed before the number is added. You will then receive this confirmation text: &ldquo;Hermes Home Alerts: You're subscribed to home alerts &amp; reminders from the Desselles household. About 1-10 msgs/wk. Msg &amp; data rates may apply. Reply HELP for help, STOP to cancel.&rdquo;</span>
+<span id="smsNo">If you did not check the text message box, you will not receive SMS alerts. You can return to the <a href="index.html">sign-up page</a> any time to opt in.</span>
+</div>
+<p class="links">
+<a href="index.html">Sign-up page</a> &nbsp;|&nbsp;
+<a href="sms-terms.html">SMS Terms &amp; Conditions</a> &nbsp;|&nbsp;
+<a href="privacy.html">Privacy Policy</a> &nbsp;|&nbsp;
+Contact: <a href="mailto:rdesselles@gmail.com">rdesselles@gmail.com</a>
+</p>
+<script>
+if (/[?&]sms=1\b/.test(location.search)) {
+  document.getElementById('smsYes').hidden = false;
+  document.getElementById('smsNo').hidden = true;
+}
+</script>
+</body>
+</html>
